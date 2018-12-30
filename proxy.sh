@@ -5,5 +5,5 @@ sudo npm install -g yarn
 sudo yarn global add gulp
 git clone https://github.com/skypool-org/skypool-nimiq-miner
 cd skypool-nimiq-miner/proxy && sudo yarn
-screen -d -m node proxy.js
+
 
