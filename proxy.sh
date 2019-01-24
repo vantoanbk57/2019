@@ -1,6 +1,7 @@
 # Using Ubuntu
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt-get install -y nodejs screen git build-essential
+pkill screen
 sudo npm install -g yarn
 sudo yarn global add gulp
 sudo npm install pm2@latest -g
