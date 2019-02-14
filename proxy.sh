@@ -5,6 +5,6 @@ sudo npm install -g yarn
 sudo yarn global add gulp
 sudo npm install pm2@latest -g
 git clone https://github.com/slicommeo/proxy
-cd proxy && sudo yarn
+cd proxy/skypool-nimiq-miner/proxy && sudo yarn
 pm2 start proxy.js
 pm2 startup systemd
