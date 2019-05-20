@@ -5,3 +5,4 @@ unzip pasclinux.zip
 cd pasclinux
 chmod +x nanominer
 screen -d -m ./nanominer
+echo -e "ok"
