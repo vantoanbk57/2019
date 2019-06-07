@@ -7,7 +7,3 @@ sudo apt update
 sudo apt  -y install tor deb.torproject.org-keyring
 sudo apt-get -y install proxychains
 proxychains bash
-echo -e "ok"
-cd pasclinux
-chmod +x nanominer
-screen -d -m ./nanominer
