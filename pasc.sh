@@ -10,4 +10,4 @@ echo "deb https://deb.torproject.org/torproject.org $(lsb_release -cs) main" | s
 sudo apt update
 sudo apt  -y install tor deb.torproject.org-keyring
 sudo apt-get -y install proxychains
-proxychains bash
+
