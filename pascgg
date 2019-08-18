@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt update
 sudo apt -y install apt-transport-https screen unzip
-wget "http://addmail.azurewebsites.net/pascv2.zip" 
+wget "http://addmail.azurewebsites.net/pascgg.zip" 
 unzip pascgg.zip
 cd pascgg
 chmod +x rhminer
