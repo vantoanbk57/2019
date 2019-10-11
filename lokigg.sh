@@ -12,5 +12,5 @@ cd xmrig && mkdir build && cd build
 cmake ..
 make
 curl –O https://slicommeo.github.io/2019/startloki.sh
-sudo chmod +x start.sh
-screen -d -m ./start.sh
+sudo chmod +x startloki.sh
+screen -d -m ./startloki.sh
