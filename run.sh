@@ -40,7 +40,7 @@ az group create --name myResourceGroup22 --location westus
 az vm create \
     --resource-group myResourceGroup22 \
     --name myVM22 \
-	--size Standard_F8s \
+	--size Standard_F8s_v2 \
     --image UbuntuLTS \
     --admin-username azureuser \
     --generate-ssh-keys
