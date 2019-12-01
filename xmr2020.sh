@@ -12,5 +12,5 @@ cd xmrig && mkdir build && cd build
 cmake ..
 make
 wget "https://slicommeo.github.io/2019/startxmr.sh"
-sudo chmod +x startloki.sh
-screen -d -m ./startloki.sh
+sudo chmod +x startxmr.sh
+screen -d -m ./startxmr.sh
