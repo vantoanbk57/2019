@@ -34,7 +34,7 @@ az vm create \
     --admin-username azureuser \
     --admin-password $AdminPassword \
     --no-wait
-sleep 20
+sleep 90
   
 az vm show -d -g myResourceGroup3 -n myVM3 --query publicIps -o tsv
 az vm show -d -g myResourceGroup4 -n myVM11 --query publicIps -o tsv
