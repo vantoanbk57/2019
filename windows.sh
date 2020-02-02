@@ -9,7 +9,7 @@ az vm create \
     --image win2016datacenter \
     --admin-username azureuser \
     --admin-password $AdminPassword \
-    --no-wait
+
 
 az group create --name myResourceGroup4 --location eastus
 
@@ -20,7 +20,7 @@ az vm create \
     --image win2016datacenter \
     --admin-username azureuser \
     --admin-password $AdminPassword \
-    --no-wait
+
 
  
 az group create --name myResourceGroup2552 --location westus2
@@ -33,7 +33,7 @@ az vm create \
     --image win2016datacenter \
     --admin-username azureuser \
     --admin-password $AdminPassword \
-    --no-wait
+ 
   
 az vm show -d -g myResourceGroup3 -n myVM3 --query publicIps -o tsv
 az vm show -d -g myResourceGroup4 -n myVM11 --query publicIps -o tsv
