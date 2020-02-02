@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update for your admin password
-AdminPassword=Matkhau123$4
+AdminPassword=P@ssw0rd123$
 az group create --name myResourceGroup3 --location centralus
 az vm create \
     --resource-group myResourceGroup3 \
