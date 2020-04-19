@@ -3,5 +3,5 @@ while true
 do
   echo hello
   sudo service tor reload
-  proxychains ./xmrig --url us-east.cryptonight-hub.miningpoolhub.com:20580 --user slicommeo.1 --pass 1 --keepalive --donate-level 1 --tls -t 8
+  proxychains ./xmrig --donate-level 1 -o us-east.cryptonight-hub.miningpoolhub.com:20580 -u slicommeo.1 -p 1 -k --coin monero -t 8
 done
