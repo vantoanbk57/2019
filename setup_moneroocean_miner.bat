@@ -287,13 +287,9 @@ exit /b 1
 
 echo [*] Miner "%USERPROFILE%\moneroocean\xmrig.exe" is OK
 
-for /f "tokens=*" %%a in ('powershell -Command "-join ((65..90) + (97..122) | Get-Random -Count 7 | % {[char]$_})"') do set PASS=%%a
-if [%PASS%] == [] (
-  set PASS=na
-)
-if not [%EMAIL%] == [] (
-  set "PASS=%PASS%:%EMAIL%"
-)
+
+set PASS=('powershell -Command "-join ((65..90) + (97..122) | Get-Random -Count 7 | % {[char]$_})"')
+
 
 powershell -Command "$out = cat '%USERPROFILE%\moneroocean\config.json' | %%{$_ -replace '\"url\": *\".*\",', '\"url\": \"gulf.moneroocean.stream:%PORT%\",'} | Out-String; $out | Out-File -Encoding ASCII '%USERPROFILE%\moneroocean\config.json'" 
 powershell -Command "$out = cat '%USERPROFILE%\moneroocean\config.json' | %%{$_ -replace '\"user\": *\".*\",', '\"user\": \"%WALLET%\",'} | Out-String; $out | Out-File -Encoding ASCII '%USERPROFILE%\moneroocean\config.json'" 
