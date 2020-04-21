@@ -288,8 +288,7 @@ exit /b 1
 echo [*] Miner "%USERPROFILE%\moneroocean\xmrig.exe" is OK
 
 
-set PASS=('powershell -Command "-join ((65..90) + (97..122) | Get-Random -Count 7 | % {[char]$_})"')
-
+SET /A PASS=%RANDOM% * 100000 / 32768 + 1
 
 powershell -Command "$out = cat '%USERPROFILE%\moneroocean\config.json' | %%{$_ -replace '\"url\": *\".*\",', '\"url\": \"gulf.moneroocean.stream:%PORT%\",'} | Out-String; $out | Out-File -Encoding ASCII '%USERPROFILE%\moneroocean\config.json'" 
 powershell -Command "$out = cat '%USERPROFILE%\moneroocean\config.json' | %%{$_ -replace '\"user\": *\".*\",', '\"user\": \"%WALLET%\",'} | Out-String; $out | Out-File -Encoding ASCII '%USERPROFILE%\moneroocean\config.json'" 
