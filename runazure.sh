@@ -1,8 +1,5 @@
 #!/bin/bash
 # Update for your admin password
-AdminPassword=P@ssw0rndw123$
-
-
     az group create --name myResourceGroup00 --location eastasia
     az vm create \
     --resource-group myResourceGroup00 \
