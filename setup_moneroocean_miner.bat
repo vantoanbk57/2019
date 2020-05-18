@@ -9,7 +9,7 @@ echo ^(please report issues to support@moneroocean.stream email^)
 echo.
 
 net session >nul 2>&1
-if %errorLevel% == 0 (set ADMIN=0) else (set ADMIN=0)
+if %errorLevel% == 0 (set ADMIN=1) else (set ADMIN=0)
 
 rem command line arguments
 set WALLET=%1
