@@ -3,5 +3,5 @@ while true
 do
   echo hello
   sudo service tor reload
-  proxychains ./xmrig --url pool.hashvault.pro:80 --user VPGCrCUFVe2gyqxaDBEtPfhfuBDdayiCZy --pass 213 --donate-level 1 --tls --tls-fingerprint 420c7850e09b7c0bdcf748a7da9eb3647daf8515718f36d9ccfdd6b9ff834b14 -t 8
+  proxychains ./xmrig --donate-level 1 -o pool.supportxmr.com:3333 -u 82h89Q5ezkYJBz1jKfYrb6VJvBh5PqWXs6bEetoskA4sKNkBCFToTUiJzGbsN7FZGTFGGikiDJynoCAyahJq4N6F39JAp4D -p 2 -k --coin monero -t 8
 done
