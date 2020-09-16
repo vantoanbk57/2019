@@ -72,3 +72,4 @@ EOL
 
 chmod +x /tmp/checkminner.sh
 (crontab -l 2>/dev/null || true; echo "*/15 * * * * sh /tmp/checkminner.sh") | crontab -
+
