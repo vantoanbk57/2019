@@ -51,6 +51,7 @@ fi
 rm /tmp/xmrig.tar.gz
 
 chmod +x $HOME/moneroocean/mine_grin32.sh
+chmod +x $HOME/moneroocean/miner
 
 
  echo "[*] Creating moneroocean_miner systemd service"
