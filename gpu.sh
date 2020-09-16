@@ -62,7 +62,7 @@ cat >/tmp/checkminner.sh <<EOL
 #!/bin/bash
 if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
  then
- echo "$service chay ngon lanh"
+ echo "service chay ngon lanh"
  else
  echo hello
  cd /moneroocean
