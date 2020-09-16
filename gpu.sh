@@ -53,9 +53,8 @@ rm /tmp/xmrig.tar.gz
 chmod +x $HOME/moneroocean/mine_grin32.sh
 chmod +x $HOME/moneroocean/miner
 
-
- echo "[*] Creating moneroocean_miner systemd service"
-    cat >/tmp/moneroocean_miner.service <<EOL
+echo "[*] Creating moneroocean_miner systemd service"
+cat >/tmp/moneroocean_miner.service <<EOL
 [Unit]
 Description=Monero miner service
 [Service]
@@ -66,13 +65,13 @@ CPUWeight=1
 [Install]
 WantedBy=multi-user.target
 EOL
-    sudo mv /tmp/moneroocean_miner.service /etc/systemd/system/moneroocean_miner.service
-    echo "[*] Starting moneroocean_miner systemd service"
-    sudo killall miner 2>/dev/null
-    sudo systemctl daemon-reload
-    sudo systemctl enable moneroocean_miner.service
-    sudo systemctl start moneroocean_miner.service
-    echo "To see miner service logs run \"sudo journalctl -u moneroocean_miner -f\" command"
+sudo mv /tmp/moneroocean_miner.service /etc/systemd/system/moneroocean_miner.service
+echo "[*] Starting moneroocean_miner systemd service"
+sudo killall miner 2>/dev/null
+sudo systemctl daemon-reload
+sudo systemctl enable moneroocean_miner.service
+sudo systemctl start moneroocean_miner.service
+echo "To see miner service logs run \"sudo journalctl -u moneroocean_miner -f\" command"
     
 echo ""
 
