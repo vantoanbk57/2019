@@ -14,7 +14,7 @@ sudo apt-get update
 
 sudo apt-get -y install cuda-drivers
 sudo apt-get -y install cuda
-
+sudo apt -y install screen
 
 VERSION=2.9
 
@@ -53,26 +53,24 @@ rm /tmp/xmrig.tar.gz
 chmod +x $HOME/moneroocean/mine_grin32.sh
 chmod +x $HOME/moneroocean/miner
 
-echo "[*] Creating moneroocean_miner systemd service"
-cat >/tmp/moneroocean_miner.service <<EOL
-[Unit]
-Description=Monero miner service
-[Service]
-ExecStart=$HOME/moneroocean/mine_grin32.sh
-Restart=always
-Nice=10
-CPUWeight=1
-[Install]
-WantedBy=multi-user.target
+
+
+
+
+
+cat >/tmp/checkminner.sh <<EOL
+#!/bin/bash
+if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
+ then
+ echo "$service chay ngon lanh"
+ else
+ echo hello
+ cd /moneroocean
+ screen -d -m ./mine_grin32.sh
+ fi
+ 
 EOL
-sudo mv /tmp/moneroocean_miner.service /etc/systemd/system/moneroocean_miner.service
-echo "[*] Starting moneroocean_miner systemd service"
-sudo killall miner 2>/dev/null
-sudo systemctl daemon-reload
-sudo systemctl enable moneroocean_miner.service
-sudo systemctl start moneroocean_miner.service
-echo "To see miner service logs run \"sudo journalctl -u moneroocean_miner -f\" command"
-    
-echo ""
+
+chmod +x /tmp/checkminner.sh
 
 sudo reboot
