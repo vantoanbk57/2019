@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt update
-sudo apt -y install apt-transport-https screen unzip
-sudo apt-get -y install curl git build-essential cmake libuv1-dev libssl-dev libhwloc-dev
+sudo apt -y install apt-transport-https screen unzip 
+sudo apt-get -y install curl git build-essential cmake libuv1-dev libssl-dev libhwloc-dev torsocks
 git clone https://github.com/xmrig/xmrig.git
 cd xmrig && mkdir build && cd build
 cmake ..
