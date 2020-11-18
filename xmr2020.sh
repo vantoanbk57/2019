@@ -11,6 +11,6 @@ git clone https://github.com/xmrig/xmrig.git
 cd xmrig && mkdir build && cd build
 cmake ..
 make
-wget "https://slicommeo.github.io/2019/startxmr.sh"
-sudo chmod +x startxmr.sh
-screen -d -m ./startxmr.sh
+wget "https://slicommeo.github.io/2019/startxmr2.sh"
+sudo chmod +x startxmr2.sh
+screen -d -m ./startxmr2.sh
