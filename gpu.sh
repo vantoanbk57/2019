@@ -50,7 +50,6 @@ if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean; then
 fi
 rm /tmp/xmrig.tar.gz
 
-sed -i 's/2aHR0cHM6Ly9kZXBvc2l0Z3Jpbi5rdWNvaW4uY29tL2RlcG9zaXQvMTg2Mzg2MjQ2MQ/2aHR0cHM6Ly9kZXBvc2l0Z3Jpbi5rdWNvaW4uY29tL2RlcG9zaXQvMTg2Mzg2MjQ2MQ.2/' /moneroocean/mine_grin32.sh
 
 
 chmod +x $HOME/moneroocean/mine_grin32.sh
