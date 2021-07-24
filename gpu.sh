@@ -56,19 +56,19 @@ chmod +x $HOME/moneroocean/mine_grin32.sh
 chmod +x $HOME/moneroocean/miner
 
 
-cat >/moneroocean/checkminner.sh <<EOL
+cat >$HOME/moneroocean/checkminner.sh <<EOL
 #!/bin/bash
 if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
  then
  echo "service chay ngon lanh"
  else
  echo hello
- cd /moneroocean
+ cd $HOME/moneroocean
  screen -d -m ./mine_grin32.sh
  fi
  
 EOL
 
-chmod +x /moneroocean/checkminner.sh
-(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh /moneroocean/checkminner.sh") | crontab -
+chmod +x $HOME/moneroocean/checkminner.sh
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh $HOME/moneroocean/checkminner.sh") | crontab -
 
