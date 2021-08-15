@@ -1,4 +1,5 @@
 #!/bin/bash
+WALLET=$1
 
 CUDA_REPO_PKG=cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
 
@@ -50,25 +51,10 @@ if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean; then
 fi
 rm /tmp/xmrig.tar.gz
 
+sed -i 's/lolMinerWorker/$WALLET/' /moneroocean/mine_eth.sh
 
-
-chmod +x $HOME/moneroocean/mine_grin32.sh
-chmod +x $HOME/moneroocean/miner
-
-
-cat >$HOME/moneroocean/checkminner.sh <<EOL
-#!/bin/bash
-if (( $(ps -ef | awk '{ print $8 }' | grep miner | wc -l) > 0 ))
- then
- echo "service chay ngon lanh"
- else
- echo hello
- cd $HOME/moneroocean
- screen -d -m ./mine_grin32.sh
- fi
- 
-EOL
-
+chmod +x $HOME/moneroocean/mine_eth.sh
+chmod +x $HOME/moneroocean/lolMiner
 chmod +x $HOME/moneroocean/checkminner.sh
 (crontab -l 2>/dev/null || true; echo "*/5 * * * * sh $HOME/moneroocean/checkminner.sh") | crontab -
 
