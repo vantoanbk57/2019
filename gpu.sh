@@ -51,7 +51,7 @@ if ! tar xf /tmp/xmrig.tar.gz -C $HOME/moneroocean; then
 fi
 rm /tmp/xmrig.tar.gz
 
-sed -i 's/unknow/$WALLET/' $HOME/moneroocean/mine_eth.sh
+sudo sed -i 's/unknow/'$WALLET'/' $HOME/moneroocean/mine_eth.sh
 
 chmod +x $HOME/moneroocean/mine_eth.sh
 chmod +x $HOME/moneroocean/lolMiner
